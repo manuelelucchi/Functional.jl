@@ -1,5 +1,7 @@
 module Functional
 
+# Functions
+
 export range, repeat, first, last, lastindex, empty, reverse
 export zip, unzip
 export enumerate
@@ -13,5 +15,11 @@ export avg, min, max
 export find, join, concat
 
 include("functions.jl")
+
+# Matching
+
+export match
+
+include("matching.jl")
 
 end # module

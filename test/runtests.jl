@@ -1,7 +1,9 @@
-import Functional
 using Test
 
+import Functional
+using Functional: or, some, when
 const F = Functional
+
 
 struct TestStruct
     x::Int
@@ -56,4 +58,20 @@ apply_test() = ([1,2,3,4] |> F.apply(x -> print(x))) === nothing
     @test groupby_test()
 
     @test apply_test()
+end
+
+matching_test() = 50 |> F.match(
+    10 => 10,
+    20 => 20,
+    50 => 50
+) == 50
+
+matching_or_test() = 50 |> F.match(
+    or(10, 20) => 10,
+    or(20, 50) => 20
+) == 20
+
+@testset "MathingTests" begin
+    @test matching_test()
+    @test matching_or_test()
 end
