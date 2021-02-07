@@ -33,7 +33,9 @@ groupby_test() = begin
     ([a,b,c,d] |> F.groupby(e -> e.x) |> collect) == [[a,b], [c,d]]
 end 
 
-@testset "Tests" begin
+apply_test() = ([1,2,3,4] |> F.apply(x -> print(x))) === nothing
+
+@testset "FunctionTests" begin
     @test join_test()
     @test sum_test()
     @test enumerate_test()
@@ -52,4 +54,6 @@ end
     @test any_test()
 
     @test groupby_test()
+
+    @test apply_test()
 end

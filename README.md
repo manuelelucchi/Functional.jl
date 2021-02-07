@@ -22,6 +22,18 @@ or
 pkg (1.4)> add Functional
 ```
 
+## Suggested use
+
+```julia
+
+import Functional
+const F = Functional
+
+# Then you can use every function you like!
+[1,2,3] |> F.map(x -> x + 1)
+
+```
+
 ## Contributing
 
 Feel free to open issues, create pull requests or fork this project!
