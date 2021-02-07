@@ -44,47 +44,56 @@ enumerate(c) = Base.enumerate(c)
 
 # Map
 
-map(f) = c -> Base.map(f, c) 
+map(f::Function) = c -> Base.map(f, c) 
+
+mapi(f::Function) = c -> begin
+    n = length(c)
+    A = Vector{Any}(undef, n)
+    for i = 1:n
+        A[i] = f(i, c[i])
+    end
+    (A...,)
+end
 
 # Filter
 
-filter(f) = c -> Base.filter(f, c)
+filter(f::Function) = c -> Base.filter(f, c)
 
 # All
 
-all(f) = c -> c |> map(f) |> Base.all
+all(f::Function) = c -> c |> map(f) |> Base.all
 
 # Any
 
-any(f) = c -> c |> map(f) |> Base.any
+any(f::Function) = c -> c |> map(f) |> Base.any
 
 # Take
 
-take(n) = c -> Base.Iterators.take(c, n)
+take(n::Int) = c -> Base.Iterators.take(c, n)
 
 # Take While
 
-takewhile(f) = c -> Base.Iterators.takewhile(f, c)
+takewhile(f::Function) = c -> Base.Iterators.takewhile(f, c)
 
 # Skip
 
-skip(n) = c -> Base.Iterators.drop(c, n)
+skip(n::Int) = c -> Base.Iterators.drop(c, n)
 
 # Skip While
 
-skipwhile(f) = c -> Base.Iterators.dropwhile(f, c)
+skipwhile(f::Function) = c -> Base.Iterators.dropwhile(f, c)
 
 # Reduce
 
-reduce(f) = c -> Base.reduce(f, c)
+reduce(f::Function) = c -> Base.reduce(f, c)
 
 # Fold Right
 
-foldright(f) = c -> Base.foldr(f, c)
+foldright(f::Function) = c -> Base.foldr(f, c)
 
 # Fold Left
 
-foldleft(f) = c -> Base.foldl(f, c)
+foldleft(f::Function) = c -> Base.foldl(f, c)
 
 # Sum
 
@@ -128,7 +137,7 @@ concat(c...) = Base.vcat(c...)
 
 # Group By
 
-groupby(f) = c -> begin
+groupby(f::Function) = c -> begin
     out = Dict()
     for e ∈ c    
         k = f(e)
@@ -144,12 +153,20 @@ end
 
 # Merge 
 
-merge(f) = c -> begin
+merge(f::Function) = c -> begin
+end
+
+# Apply
+
+apply(f::Function) = c -> begin
+    for e ∈ c 
+        f(e)
+    end
 end
 
 # Distinct
 
-distinc(f) = c -> begin
+distinc(f::Function) = c -> begin
     out = Dict()
     for e ∈ c
         k = f(e)
@@ -160,21 +177,3 @@ distinc(f) = c -> begin
     end
     return out |> collect |> map(e -> e[2])
 end
-
-##### TODO #####
-
-# distinct(c)
-
-# union(f)
-
-# intersect
-
-# split(f)
-
-# permute(f)
-
-# sort(f) 
-
-# unfold(f)
-
-# distinct()
