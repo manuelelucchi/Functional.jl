@@ -166,7 +166,7 @@ end
 
 # Distinct
 
-distinc(f::Function) = c -> begin
+distinct(f::Function) = c -> begin
     out = Dict()
     for e ∈ c
         k = f(e)

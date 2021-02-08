@@ -1,9 +1,15 @@
-import Functional
 using Test
 
+import Functional
+using Functional: or, default, when
 const F = Functional
 
 struct TestStruct
+    x::Int
+    s::String
+end
+
+mutable struct TestMutableStruct
     x::Int
     s::String
 end
@@ -33,7 +39,8 @@ groupby_test() = begin
     ([a,b,c,d] |> F.groupby(e -> e.x) |> collect) == [[a,b], [c,d]]
 end 
 
-apply_test() = ([1,2,3,4] |> F.apply(x -> print(x))) === nothing
+apply_test() = ([TestMutableStruct(1, "ciao"), 
+                TestMutableStruct(2, "abaco")] |> F.apply(x -> x.x = 2)) === nothing
 
 @testset "FunctionTests" begin
     @test join_test()
@@ -56,4 +63,32 @@ apply_test() = ([1,2,3,4] |> F.apply(x -> print(x))) === nothing
     @test groupby_test()
 
     @test apply_test()
+end
+
+matching_test() = 50 |> F.match(
+    10 => 10,
+    20 => 20,
+    50 => 50
+) == 50
+
+matching_or_test() = 50 |> F.match(
+    or(10, 20) => 10,
+    or(20, 50) => 20
+) == 20
+
+matching_when_test() = 50 |> F.match(
+    (50 |> when(x -> x < 50)) => 10,
+    (50 |> when(x -> x >= 50)) => 20
+) == 20
+
+matching_with_default() = 50 |> F.match(
+    20 => 20,
+    default() => 10
+)  == 10
+
+@testset "MatchingTests" begin
+    @test matching_test()
+    @test matching_or_test()
+    @test matching_when_test()
+    @test matching_with_default()
 end
