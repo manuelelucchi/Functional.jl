@@ -2,6 +2,10 @@ module Functional
 
 # Functions
 
+export all
+export all2
+export allPairs
+
 export range, repeat, first, last, lastindex, empty, reverse
 export zip, unzip
 export enumerate

@@ -14,7 +14,21 @@ mutable struct TestMutableStruct
     s::String
 end
 
-join_test() = (["a", "b", "c"] |> F.join(",")) == "a,b,c"
+all_test() = ([1,2,3,4] |> F.all(x -> x != 3)) == false
+
+all2_test() = (([1,2], [1,2]) |> F.all2((x, y) -> x == y)) == true
+
+allPairs_test() = Set(F.allPairs([1,2], [1,2])) == Set([(1, 1), (1, 2), (2, 1), (2, 2)])
+
+any_test() = ([1,2,3,4] |> F.any(x -> x == 3)) == true
+
+any2_test() = (([1,2,3,4], [1,3,4,5]) |> F.any2((x, y) -> x == y)) == true
+
+avg_test() = ([1,2,3] |> F.avg) == 2
+
+averageBy_test() = ([0,1,2] |> F.averageBy(x -> x + 1)) == 2
+
+#= join_test() = (["a", "b", "c"] |> F.join(",")) == "a,b,c"
 sum_test() = ([1,2,3,4] |> F.sum) == 10
 enumerate_test() = (["a", "b", "c"] |> F.enumerate |> collect) == [(1, "a"), (2, "b"), (3, "c")]
 
@@ -28,8 +42,7 @@ map_test() = ([1,2,3] |> F.map(x -> 2 * x) |> collect) == [2,4,6]
 zip_test() = (([1,2], ["a", "b"]) |> x -> F.zip(x) |> collect) == [(1, "a"), (2, "b")]
 reverse_test() = ([1,2,3,4] |> F.reverse |> collect) == [4,3,2,1]
 
-all_test() = ([1,2,3,4] |> F.all(x -> x != 3)) == false
-any_test() = ([1,2,3,4] |> F.any(x -> x == 3)) == true
+
 
 groupby_test() = begin
     a = TestStruct(10, "a")
@@ -40,10 +53,22 @@ groupby_test() = begin
 end 
 
 apply_test() = ([TestMutableStruct(1, "ciao"), 
-                TestMutableStruct(2, "abaco")] |> F.apply(x -> x.x = 2)) === nothing
+                TestMutableStruct(2, "abaco")] |> F.apply(x -> x.x = 2)) === nothing =#
 
 @testset "FunctionTests" begin
-    @test join_test()
+    @test all_test()
+
+    @test all2_test()
+
+    @test allPairs_test()
+
+    @test any_test()
+
+    @test any2_test() 
+    
+    @test avg_test()
+
+    #= @test join_test()
     @test sum_test()
     @test enumerate_test()
     
@@ -57,12 +82,11 @@ apply_test() = ([TestMutableStruct(1, "ciao"),
     @test zip_test()
     @test reverse_test()
 
-    @test all_test()
     @test any_test()
 
     @test groupby_test()
 
-    @test apply_test()
+    @test apply_test() =#
 end
 
 matching_test() = 50 |> F.match(
