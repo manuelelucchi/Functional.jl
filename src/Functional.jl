@@ -18,7 +18,7 @@ include("functions.jl")
 
 # Matching
 
-export match
+export match, default, when, or
 
 include("matching.jl")
 
