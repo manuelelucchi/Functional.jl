@@ -46,11 +46,39 @@ enumerate(c) = Base.enumerate(c)
 
 map(f::Function) = c -> Base.map(f, c) 
 
+map2(f::Function) = c -> begin
+    (a, b) = c
+    if length(a) != length(b)
+        throw(ErrorException("Error different lenghts"))
+    end
+
+    n = length(a)
+    A = Vector{Any}(undef, n)
+    for i = 1:n
+        A[i] = f(a[i], b[i])
+    end
+    (A...,)
+end
+
 mapi(f::Function) = c -> begin
     n = length(c)
     A = Vector{Any}(undef, n)
     for i = 1:n
         A[i] = f(i, c[i])
+    end
+    (A...,)
+end
+
+mapi2(f::Function) = c -> begin
+    (a, b) = c
+    if length(a) != length(b)
+        throw(ErrorException("Error different lenghts"))
+    end
+
+    n = length(a)
+    A = Vector{Any}(undef, n)
+    for i = 1:n
+        A[i] = f(i, a[i], b[i])
     end
     (A...,)
 end
@@ -63,9 +91,13 @@ filter(f::Function) = c -> Base.filter(f, c)
 
 all(f::Function) = c -> c |> map(f) |> Base.all
 
+all2(f::Function) = nothing
+
 # Any
 
 any(f::Function) = c -> c |> map(f) |> Base.any
+
+any2(f::Function) = nothing
 
 # Take
 
@@ -82,6 +114,10 @@ skip(n::Int) = c -> Base.Iterators.drop(c, n)
 # Skip While
 
 skipwhile(f::Function) = c -> Base.Iterators.dropwhile(f, c)
+
+# Tail 
+
+tail() = c -> c |> skip(1)
 
 # Reduce
 
@@ -158,11 +194,17 @@ end
 
 # Apply
 
-apply(f::Function) = c -> begin
+iter(f::Function) = c -> begin
     for e ∈ c 
         f(e)
     end
 end
+
+iter2(f::Function) = nothing
+
+iteri(f::Function) = nothing
+
+iteri2(f::Function) = nothing
 
 # Distinct
 
