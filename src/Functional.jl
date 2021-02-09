@@ -5,6 +5,13 @@ module Functional
 export all
 export all2
 export allPairs
+export any
+export any2 
+export avg
+export average
+export avgBy
+export averageBy
+export chunkBySize
 
 export range, repeat, first, last, lastindex, empty, reverse
 export zip, unzip

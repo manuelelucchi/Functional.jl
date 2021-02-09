@@ -50,6 +50,8 @@ end
 
 avg(c) = sum(c) / length(c)
 
+const average = avg
+
 # AverageBy
 
 averageBy(f::Function) = c -> c |> map(f) |> avg
@@ -62,7 +64,16 @@ choose(f::Function) = nothing
 
 # ChunkBySize 
 
-chunkBySize(f::Function) = nothing
+chunkBySize(n::Int) = c -> begin
+    l = length(c)
+    m = Int(trunc(l / n))
+    A = Vector{Any}(undef, m)
+    for i = 1:m
+        N = Base.slice(c, ((i - 1) * n + 1):(i * n), :) |> Base.collect
+        A[i] = N
+    end
+    (A...,)
+end
 
 # CompareWith
 

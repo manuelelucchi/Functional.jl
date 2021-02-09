@@ -28,6 +28,8 @@ avg_test() = ([1,2,3] |> F.avg) == 2
 
 averageBy_test() = ([0,1,2] |> F.averageBy(x -> x + 1)) == 2
 
+chunkBySize_test() = ([1,2,3,4,5,6,7] |> F.chunkBySize(2)) == [[1,2],[3.4], [5,6], [7]]
+
 #= join_test() = (["a", "b", "c"] |> F.join(",")) == "a,b,c"
 sum_test() = ([1,2,3,4] |> F.sum) == 10
 enumerate_test() = (["a", "b", "c"] |> F.enumerate |> collect) == [(1, "a"), (2, "b"), (3, "c")]
@@ -67,6 +69,8 @@ apply_test() = ([TestMutableStruct(1, "ciao"),
     @test any2_test() 
     
     @test avg_test()
+
+    @test chunkBySize_test()
 
     #= @test join_test()
     @test sum_test()
