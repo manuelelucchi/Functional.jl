@@ -30,9 +30,36 @@ averageBy_test() = ([0,1,2] |> F.averageBy(x -> x + 1)) == 2
 
 chunkBySize_test() = ([1,2,3,4,5,6,7] |> F.chunkBySize(2)) == [[1,2],[3.4], [5,6], [7]]
 
+concat_test() = (([1,2], [3,4]) |> F.concat) == [1,2,3,4]
+
+contains_test_1() = ([1,2,3] |> F.contains(1)) == true
+
+contains_test_2() = ([TestStruct(1, ""), TestStruct(2, "")] |> F.contains(x -> x.x == 1)) == true
+
+countBy_test() = ([1,2,3,4] |> F.countBy(x -> x > 2)) == 2
+
+distinct_test() = Set(([1,2,3,2] |> F.distinct)) == Set([1,2,3])
+
+distinctBy_test() = Set(([TestStruct(1, ""), TestStruct(2, ""), TestStruct(2, "")] |> F.distinctBy(x -> x.x))) == Set([TestStruct(1, ""), TestStruct(2, "")])
+
+enumerate_test() = (["a", "b", "c"] |> F.enumerate |> collect) == [(1, "a"), (2, "b"), (3, "c")]
+
+empty_test() = ([] |> F.empty) == true
+
+except_test() = ([1,2,3,4] |> F.except([1,2])) == [3,4]
+
+filter_test() = ([1,2,3,4] |> F.filter(x -> x > 2)) == [3,4]
+
+find_test() = ([1,2,3,4] |> F.find(x -> x >= 3)) == 3
+
+findBack_test() = ([1,2,3,4] |> F.findBack(x -> x >= 3)) == 4
+
+findIndex_test() = ([1,2,3,4] |> F.findIndex(x -> x >= 3)) == 3
+
+findIndexBack_test() = ([1,2,3,4] |> F.findIndexBack(x -> x >= 3)) == 4
+ 
 #= join_test() = (["a", "b", "c"] |> F.join(",")) == "a,b,c"
 sum_test() = ([1,2,3,4] |> F.sum) == 10
-enumerate_test() = (["a", "b", "c"] |> F.enumerate |> collect) == [(1, "a"), (2, "b"), (3, "c")]
 
 take_test() = ([1,2,3] |> F.take(2) |> collect) == [1,2]
 takewhile_test() = ([1,2,3,4] |> F.takewhile(x -> x < 3) |> collect) == [1,2]
@@ -72,9 +99,35 @@ apply_test() = ([TestMutableStruct(1, "ciao"),
 
     @test chunkBySize_test()
 
+    @test concat_test()
+
+    @test contains_test_1()
+    @test contains_test_2()
+
+    @test countBy_test()
+
+    @test distinct_test()
+
+    @test distinctBy_test()
+
+    @test enumerate_test()
+
+    @test empty_test()
+
+    @test except_test()
+
+    @test filter_test()
+
+    @test find_test()
+
+    @test findBack_test()
+
+    @test findIndex_test()
+
+    @test findIndexBack_test()
+
     #= @test join_test()
     @test sum_test()
-    @test enumerate_test()
     
     @test take_test()
     @test takewhile_test()

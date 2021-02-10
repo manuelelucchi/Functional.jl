@@ -18,11 +18,11 @@ allPairs(a, b) = begin
     A = Vector{Any}(undef, n * m)
     k = 1
     for i = 1:n
-        for j = 1:m
-            A[k] = (a[i], b[j])
-            k += 1
-        end
+    for j = 1:m
+        A[k] = (a[i], b[j])
+        k += 1
     end
+end
     (A...,)
 end
 
@@ -35,14 +35,14 @@ any(f::Function) = c -> c |> map(f) |> Base.any
 any2(f::Function) = c -> begin
     (a, b) = c
     if length(a) != length(b)
-        throw(ErrorException("Error different lenghts"))
-    end
+    throw(ErrorException("Error different lenghts"))
+end
 
     n = length(a)
     A = Vector{Any}(undef, n)
     for i = 1:n
-        if f(a[i], b[i]) return true end
-    end
+    if f(a[i], b[i]) return true end
+end
     return false
 end
 
@@ -69,9 +69,9 @@ chunkBySize(n::Int) = c -> begin
     m = Int(trunc(l / n))
     A = Vector{Any}(undef, m)
     for i = 1:m
-        N = Base.slice(c, ((i - 1) * n + 1):(i * n), :) |> Base.collect
-        A[i] = N
-    end
+        # N = Base.slice(c, ((i - 1) * n + 1):(i * n), :) |> Base.collect
+        # A[i] = N
+end
     (A...,)
 end
 
@@ -87,33 +87,35 @@ concat(c...) = Base.vcat(c...)
 
 # Contains 
 
-contains(e) = nothing
+contains(e) = c -> c |> any(x -> x == e)
+
+contains(f::Function) = c -> c |> any(f)
 
 # CountBy 
 
-countBy(f::Function) = nothing
+countBy(f::Function) = d -> d |> filter(f) |> length
 
 # Distinct
 
-distinct(c) = nothing
+distinct(c) = c |> distinctBy(x -> x)
 
 # DistinctBy
 
 distinctBy(f::Function) = c -> begin
     out = Dict()
     for e ∈ c
-        k = f(e)
-        l = get(out, k, nothing)
-        if l === nothing
-            out[k] = e
-        end
+    k = f(e)
+    l = get(out, k, nothing)
+    if l === nothing
+        out[k] = e
     end
+end
     return out |> collect |> map(e -> e[2])
 end
 
 # Enumerate
 
-enumerate(c) = Base.enumerate(c)
+enumerate(c) = Base.enumerate(c) |> collect
 
 # Empty
 
@@ -121,7 +123,7 @@ const empty = Base.isempty
 
 # Except
 
-except(values) = c -> nothing
+except(v) = c -> c |> filter(x -> x ∉ v)
 
 # Exists 
 
@@ -135,19 +137,19 @@ filter(f::Function) = c -> Base.filter(f, c)
 
 # Find
 
-find(f::Function) = x -> x |> filter(f) |> first
+find(f::Function) = c -> c |> filter(f) |> first
 
 # FindBack 
 
-findBack(f::Function) = x -> x |> filter(f) |> last
+findBack(f::Function) = c -> c |> filter(f) |> last
 
 # FindIndex
 
-findIndex(f::Function) = nothing
+findIndex(f::Function) = c -> c |> enumerate |> filter(x -> f(x[2])) |> first |> x -> x[1]
 
 # FindIndexBack 
 
-findIndexBack(f::Function) = nothing
+findIndexBack(f::Function) = c -> c |> enumerate |> filter(x -> f(x[2])) |> last |> x -> x[1]
 
 # First 
 
@@ -184,14 +186,14 @@ const forAll = nothing # iter
 groupBy(f::Function) = c -> begin
     out = Dict()
     for e ∈ c    
-        k = f(e)
-        l = get(out, k, nothing)
-        if l === nothing
-            l = []
-            out[k] = l
-        end
-        push!(l, e)
+    k = f(e)
+    l = get(out, k, nothing)
+    if l === nothing
+        l = []
+        out[k] = l
     end
+    push!(l, e)
+end
     return out |> collect |> map(e -> e[2])
 end
 
@@ -248,14 +250,14 @@ map(f::Function) = c -> Base.map(f, c)
 map2(f::Function) = c -> begin
     (a, b) = c
     if length(a) != length(b)
-        throw(ErrorException("Error different lenghts"))
-    end
+    throw(ErrorException("Error different lenghts"))
+end
 
     n = length(a)
     A = Vector{Any}(undef, n)
     for i = 1:n
-        A[i] = f(a[i], b[i])
-    end
+    A[i] = f(a[i], b[i])
+end
     (A...,)
 end
 
@@ -277,22 +279,22 @@ mapi(f::Function) = c -> begin
     n = length(c)
     A = Vector{Any}(undef, n)
     for i = 1:n
-        A[i] = f(i, c[i])
-    end
+    A[i] = f(i, c[i])
+end
     (A...,)
 end
 
 mapi2(f::Function) = c -> begin
     (a, b) = c
     if length(a) != length(b)
-        throw(ErrorException("Error different lenghts"))
-    end
+    throw(ErrorException("Error different lenghts"))
+end
 
     n = length(a)
     A = Vector{Any}(undef, n)
     for i = 1:n
-        A[i] = f(i, a[i], b[i])
-    end
+    A[i] = f(i, a[i], b[i])
+end
     (A...,)
 end
 
