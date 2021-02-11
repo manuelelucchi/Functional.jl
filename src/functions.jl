@@ -23,7 +23,7 @@ allPairs(a, b) = begin
         k += 1
     end
 end
-    (A...,)
+    A
 end
 
 allPairs(c) = allPairs(c...)
@@ -72,7 +72,7 @@ chunkBySize(n::Int) = c -> begin
         # N = Base.slice(c, ((i - 1) * n + 1):(i * n), :) |> Base.collect
         # A[i] = N
 end
-    (A...,)
+    A
 end
 
 # CompareWith
@@ -203,11 +203,17 @@ const head = first
 
 # Indexed
 
-indexed(c) = nothing
+const indexed = enumerate
 
 # Init
 
-init(n, f::Function) = nothing
+init(n, f::Function) = begin
+    A = Vector{Any}(undef, n)
+    for i = 1:n
+    A[i] = f(i)
+end
+    A
+end
 
 init(f::Function) = n -> init(n, f)
 
@@ -227,13 +233,38 @@ iter(f::Function) = c -> begin
     end
 end
 
-iter2(f::Function) = nothing
+iter2(f::Function) = c -> begin
+    (a, b) = c
+    n = length(a)
+    m = length(b)
+    if n != m
+    throw(ErrorException("Error"))
+end
+    for i = 1:n
+    f(a[i], b[i])
+end
+end
 
 # Iteri
 
-iteri(f::Function) = nothing
+iteri(f::Function) = c -> begin
+    n = length(c)
+    for i = 1:n
+    f(i, c[i])
+end
+end
 
-iteri2(f::Function) = nothing
+iteri2(f::Function) = c -> begin
+    (a, b) = c
+    n = length(a)
+    m = length(b)
+    if n != m
+    throw(ErrorException("Error"))
+end
+    for i = 1:n
+    f(i, a[i], b[i])
+end
+end
 
 # Last
 
@@ -258,20 +289,50 @@ end
     for i = 1:n
     A[i] = f(a[i], b[i])
 end
-    (A...,)
+    A
 end
 
-map3(f::Function) = nothing
+map3(f::Function) = s -> begin
+    (a, b, c) = s
+    if length(a) != length(b) != length(c)
+    throw(ErrorException("Error different lenghts"))
+end
 
-mapi3(f::Function) = nothing
+    n = length(a)
+    A = Vector{Any}(undef, n)
+    for i = 1:n
+    A[i] = f(a[i], b[i], c[i])
+end
+    A
+end
 
 # MapFold
 
-mapFold(f::Function, s) = c -> nothing
+mapFold(f::Function, s) = c -> begin
+    n = length(c)
+    A = Vector{Any}(undef, n)
+    state = s
+    for i = 1:n
+    (new_value, new_state) = f(c[i], state)
+    state = new_state
+    A[i] = new_value
+end
+    (A, state)
+end
 
 # MapFoldBack
 
-mapFoldBack(f::Function, s) = c -> nothing
+mapFoldBack(f::Function, s) = c -> begin
+    n = length(c)
+    A = Vector{Any}(undef, n)
+    state = s
+    for i = Iterators.reverse(1:n)
+    (new_value, new_state) = f(c[i], state)
+    state = new_state
+    A[i] = new_value
+end
+    (A, state)
+end
 
 # Mapi
 
@@ -281,7 +342,7 @@ mapi(f::Function) = c -> begin
     for i = 1:n
     A[i] = f(i, c[i])
 end
-    (A...,)
+    A
 end
 
 mapi2(f::Function) = c -> begin
@@ -295,8 +356,10 @@ end
     for i = 1:n
     A[i] = f(i, a[i], b[i])
 end
-    (A...,)
+    A
 end
+
+mapi3(f::Function) = nothing
 
 # Max
 

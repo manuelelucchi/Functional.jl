@@ -58,6 +58,27 @@ findIndex_test() = ([1,2,3,4] |> F.findIndex(x -> x >= 3)) == 3
 
 findIndexBack_test() = ([1,2,3,4] |> F.findIndexBack(x -> x >= 3)) == 4
  
+init_test() = (F.init(3, i -> i - 1)) == [0,1,2]
+
+item_test() = ([1,2,3,4] |> F.item(3)) == 3
+
+#= 
+iter_test() = nothing
+
+iteri_test() = nothing
+
+iter2_test() = nothing
+
+iteri2_test() = nothing =#
+
+map_test() = ([1,2,3] |> F.map(x -> 2 * x) |> collect) == [2,4,6]
+
+map2_test() = (([1,2,3], [2,3,4]) |> F.map2((x, y) -> y - x)) == [1,1,1]
+
+map3_test() = (([1,2,3], [3,2,1], [4,4,4]) |> F.map3((x, y, z) -> x + y - z)) == [0,0,0]
+
+mapFold_test() = ([1,2,3] |> F.mapFold((x, s) -> (x + 1, s + x), 0)) == ([2,3,4], 16)
+
 #= join_test() = (["a", "b", "c"] |> F.join(",")) == "a,b,c"
 sum_test() = ([1,2,3,4] |> F.sum) == 10
 
@@ -67,7 +88,6 @@ takewhile_test() = ([1,2,3,4] |> F.takewhile(x -> x < 3) |> collect) == [1,2]
 skip_test() = ([1,2,3] |> F.skip(2) |> collect) == [3]
 skipwhile_test() = ([1,2,3,4] |> F.skipwhile(x -> x < 3) |> collect) == [3,4]
 
-map_test() = ([1,2,3] |> F.map(x -> 2 * x) |> collect) == [2,4,6]
 zip_test() = (([1,2], ["a", "b"]) |> x -> F.zip(x) |> collect) == [(1, "a"), (2, "b")]
 reverse_test() = ([1,2,3,4] |> F.reverse |> collect) == [4,3,2,1]
 
@@ -126,6 +146,18 @@ apply_test() = ([TestMutableStruct(1, "ciao"),
 
     @test findIndexBack_test()
 
+    @test init_test()
+
+    @test item_test()
+
+    @test map_test()
+
+    @test map2_test()
+
+    @test map3_test()
+
+    @test mapFold_test()
+    
     #= @test join_test()
     @test sum_test()
     
@@ -135,7 +167,7 @@ apply_test() = ([TestMutableStruct(1, "ciao"),
     @test skip_test()
     @test skipwhile_test()
 
-    @test map_test()
+    
     @test zip_test()
     @test reverse_test()
 
