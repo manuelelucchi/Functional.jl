@@ -18,7 +18,7 @@ all_test() = ([1,2,3,4] |> F.all(x -> x != 3)) == false
 
 all2_test() = (([1,2], [1,2]) |> F.all2((x, y) -> x == y)) == true
 
-allPairs_test() = Set(F.allPairs([1,2], [1,2])) == Set([(1, 1), (1, 2), (2, 1), (2, 2)])
+allPairs_test() = F.allPairs([1,2], [1,2]) |> F.equals([(1, 1), (1, 2), (2, 1), (2, 2)])
 
 any_test() = ([1,2,3,4] |> F.any(x -> x == 3)) == true
 
@@ -26,41 +26,43 @@ any2_test() = (([1,2,3,4], [1,3,4,5]) |> F.any2((x, y) -> x == y)) == true
 
 avg_test() = ([1,2,3] |> F.avg) == 2
 
-averageBy_test() = ([0,1,2] |> F.averageBy(x -> x + 1)) == 2
+averageBy_test() = [0,1,2] |> F.averageBy(x -> x + 1) |> F.equals(2)
 
-chunkBySize_test() = ([1,2,3,4,5,6,7] |> F.chunkBySize(2)) == [[1,2],[3.4], [5,6], [7]]
+chunkBySize_test() = [1,2,3,4,5,6,7] |> F.chunkBySize(2) |> F.equals([[1,2],[3.4], [5,6], [7]])
 
-concat_test() = (([1,2], [3,4]) |> F.concat) == [1,2,3,4]
+concat_test() = ([1,2], [3,4]) |> F.concat |> F.equals([1,2,3,4])
 
 contains_test_1() = ([1,2,3] |> F.contains(1)) == true
 
 contains_test_2() = ([TestStruct(1, ""), TestStruct(2, "")] |> F.contains(x -> x.x == 1)) == true
 
-countBy_test() = ([1,2,3,4] |> F.countBy(x -> x > 2)) == 2
+countBy_test() = [1,2,3,4] |> F.countBy(x -> x > 2) |> F.equals(2)
 
-distinct_test() = Set(([1,2,3,2] |> F.distinct)) == Set([1,2,3])
+distinct_test() = [1,2,3,2] |> F.distinct |> Set |> F.equals(Set([1,2,3]))
 
-distinctBy_test() = Set(([TestStruct(1, ""), TestStruct(2, ""), TestStruct(2, "")] |> F.distinctBy(x -> x.x))) == Set([TestStruct(1, ""), TestStruct(2, "")])
+distinctBy_test() = [TestStruct(1, ""), TestStruct(2, ""), TestStruct(2, "")] |> F.distinctBy(x -> x.x) |> Set |> F.equals(Set([TestStruct(1, ""), TestStruct(2, "")]))
 
-enumerate_test() = (["a", "b", "c"] |> F.enumerate |> collect) == [(1, "a"), (2, "b"), (3, "c")]
+enumerate_test() = ["a", "b", "c"] |> F.enumerate |> F.equals([(1, "a"), (2, "b"), (3, "c")])
 
 empty_test() = ([] |> F.empty) == true
 
-except_test() = ([1,2,3,4] |> F.except([1,2])) == [3,4]
+equals_test() = (3 |> F.equals(3)) == true
 
-filter_test() = ([1,2,3,4] |> F.filter(x -> x > 2)) == [3,4]
+except_test() = [1,2,3,4] |> F.except([1,2]) |> F.equals([3,4])
 
-find_test() = ([1,2,3,4] |> F.find(x -> x >= 3)) == 3
+filter_test() = [1,2,3,4] |> F.filter(x -> x > 2) |> F.equals([3,4])
 
-findBack_test() = ([1,2,3,4] |> F.findBack(x -> x >= 3)) == 4
+find_test() = [1,2,3,4] |> F.find(x -> x >= 3) |> F.equals(3)
 
-findIndex_test() = ([1,2,3,4] |> F.findIndex(x -> x >= 3)) == 3
+findBack_test() = [1,2,3,4] |> F.findBack(x -> x >= 3) |> F.equals(4)
 
-findIndexBack_test() = ([1,2,3,4] |> F.findIndexBack(x -> x >= 3)) == 4
+findIndex_test() = [1,2,3,4] |> F.findIndex(x -> x >= 3) |> F.equals(3)
+
+findIndexBack_test() = [1,2,3,4] |> F.findIndexBack(x -> x >= 3) |> F.equals(4)
  
-init_test() = (F.init(3, i -> i - 1)) == [0,1,2]
+init_test() = F.init(3, i -> i - 1) |> F.equals([0,1,2])
 
-item_test() = ([1,2,3,4] |> F.item(3)) == 3
+item_test() = [1,2,3,4] |> F.item(3) |> F.equals(3)
 
 #= 
 iter_test() = nothing
@@ -71,13 +73,29 @@ iter2_test() = nothing
 
 iteri2_test() = nothing =#
 
-map_test() = ([1,2,3] |> F.map(x -> 2 * x) |> collect) == [2,4,6]
+map_test() = [1,2,3] |> F.map(x -> 2 * x) |> F.equals([2,4,6])
 
-map2_test() = (([1,2,3], [2,3,4]) |> F.map2((x, y) -> y - x)) == [1,1,1]
+map2_test() = ([1,2,3], [2,3,4]) |> F.map2((x, y) -> y - x) |> F.equals([1,1,1])
 
-map3_test() = (([1,2,3], [3,2,1], [4,4,4]) |> F.map3((x, y, z) -> x + y - z)) == [0,0,0]
+map3_test() = ([1,2,3], [3,2,1], [4,4,4]) |> F.map3((x, y, z) -> x + y - z) |> F.equals([0,0,0])
 
-mapFold_test() = ([1,2,3] |> F.mapFold((x, s) -> (x + 1, s + x), 0)) == ([2,3,4], 16)
+mapFold_test() = [1,2,3] |> F.mapFold((x, s) -> (x + 1, s + x), 0) |> F.equals(([2,3,4], 6))
+
+mapFoldBack_test() = [1,2,3] |> F.mapFoldBack((x, s) -> (x + 1, s + x), 0) |> F.equals(([2,3,4], 6))
+
+mapi_test() = [1,2,3] |> F.mapi((i, x) -> x + i) |> F.equals([2,4,6])
+
+mapi2_test() = ([1,1,1], [1,1,1]) |> F.mapi2((i, x, y) -> i + x + y) |> F.equals([3,4,5])
+
+mapi3_test() = ([1,1,1], [1,1,1], [1,1,1]) |> F.mapi3((i, x, y, z) -> i + x + y + z) |> F.equals([4,5,6])
+
+max_test() = [1,2,3] |> F.max |> F.equals(3)
+
+maxBy_test() = ["a", "ab", "abc"] |> F.maxBy(length) |> F.equals(3)
+
+min_test() = [1,2,3] |> F.min |> F.equals(1)
+
+minBy_test() = ["a", "ab", "abc"] |> F.minBy(length) |> F.equals(1)
 
 #= join_test() = (["a", "b", "c"] |> F.join(",")) == "a,b,c"
 sum_test() = ([1,2,3,4] |> F.sum) == 10
@@ -134,6 +152,8 @@ apply_test() = ([TestMutableStruct(1, "ciao"),
 
     @test empty_test()
 
+    @test equals_test()
+
     @test except_test()
 
     @test filter_test()
@@ -157,6 +177,22 @@ apply_test() = ([TestMutableStruct(1, "ciao"),
     @test map3_test()
 
     @test mapFold_test()
+
+    @test mapFoldBack_test()
+
+    @test mapi_test()
+
+    @test mapi2_test()
+
+    @test mapi3_test()
+
+    @test max_test()
+
+    @test maxBy_test()
+
+    @test min_test()
+
+    @test minBy_test()
     
     #= @test join_test()
     @test sum_test()

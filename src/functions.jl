@@ -121,6 +121,10 @@ enumerate(c) = Base.enumerate(c) |> collect
 
 const empty = Base.isempty
 
+# Equals
+
+equals(e) = v -> v == e
+
 # Except
 
 except(v) = c -> c |> filter(x -> x ∉ v)
@@ -359,7 +363,19 @@ end
     A
 end
 
-mapi3(f::Function) = nothing
+mapi3(f::Function) = s -> begin
+    (a, b, c) = s
+    if length(a) != length(b) != length(c)
+    throw(ErrorException("Error different lenghts"))
+end
+
+    n = length(a)
+    A = Vector{Any}(undef, n)
+    for i = 1:n
+    A[i] = f(i, a[i], b[i], c[i])
+end
+    A
+end
 
 # Max
 
@@ -381,7 +397,7 @@ minBy(f::Function) = c -> Base.Iterators.minimum(f, c)
 
 pairwise(c) = nothing
 
-# Parition
+# Partition
 
 partition(f::Function) = c -> nothing
 
