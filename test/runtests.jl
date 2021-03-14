@@ -18,7 +18,7 @@ all_test() = ([1,2,3,4] |> F.all(x -> x != 3)) == false
 
 all2_test() = (([1,2], [1,2]) |> F.all2((x, y) -> x == y)) == true
 
-allPairs_test() = F.allPairs([1,2], [1,2]) |> F.equals([(1, 1), (1, 2), (2, 1), (2, 2)])
+allpairs_test() = F.allpairs([1,2], [1,2]) |> F.equals([(1, 1), (1, 2), (2, 1), (2, 2)])
 
 any_test() = ([1,2,3,4] |> F.any(x -> x == 3)) == true
 
@@ -26,9 +26,9 @@ any2_test() = (([1,2,3,4], [1,3,4,5]) |> F.any2((x, y) -> x == y)) == true
 
 avg_test() = ([1,2,3] |> F.avg) == 2
 
-averageBy_test() = [0,1,2] |> F.averageBy(x -> x + 1) |> F.equals(2)
+averageby_test() = [0,1,2] |> F.averageby(x -> x + 1) |> F.equals(2)
 
-chunkBySize_test() = [1,2,3,4,5,6,7] |> F.chunkBySize(2) |> F.equals([[1,2],[3.4], [5,6], [7]])
+chunkbysize_test() = [1,2,3,4,5,6,7] |> F.chunkbysize(2) |> F.equals([[1,2],[3.4], [5,6], [7]])
 
 concat_test() = ([1,2], [3,4]) |> F.concat |> F.equals([1,2,3,4])
 
@@ -36,11 +36,11 @@ contains_test_1() = ([1,2,3] |> F.contains(1)) == true
 
 contains_test_2() = ([TestStruct(1, ""), TestStruct(2, "")] |> F.contains(x -> x.x == 1)) == true
 
-countBy_test() = [1,2,3,4] |> F.countBy(x -> x > 2) |> F.equals(2)
+countby_test() = [1,2,3,4] |> F.countby(x -> x > 2) |> F.equals(2)
 
 distinct_test() = [1,2,3,2] |> F.distinct |> Set |> F.equals(Set([1,2,3]))
 
-distinctBy_test() = [TestStruct(1, ""), TestStruct(2, ""), TestStruct(2, "")] |> F.distinctBy(x -> x.x) |> Set |> F.equals(Set([TestStruct(1, ""), TestStruct(2, "")]))
+distinctby_test() = [TestStruct(1, ""), TestStruct(2, ""), TestStruct(2, "")] |> F.distinctby(x -> x.x) |> Set |> F.equals(Set([TestStruct(1, ""), TestStruct(2, "")]))
 
 enumerate_test() = ["a", "b", "c"] |> F.enumerate |> F.equals([(1, "a"), (2, "b"), (3, "c")])
 
@@ -54,11 +54,11 @@ filter_test() = [1,2,3,4] |> F.filter(x -> x > 2) |> F.equals([3,4])
 
 find_test() = [1,2,3,4] |> F.find(x -> x >= 3) |> F.equals(3)
 
-findBack_test() = [1,2,3,4] |> F.findBack(x -> x >= 3) |> F.equals(4)
+findback_test() = [1,2,3,4] |> F.findback(x -> x >= 3) |> F.equals(4)
 
-findIndex_test() = [1,2,3,4] |> F.findIndex(x -> x >= 3) |> F.equals(3)
+findindex_test() = [1,2,3,4] |> F.findindex(x -> x >= 3) |> F.equals(3)
 
-findIndexBack_test() = [1,2,3,4] |> F.findIndexBack(x -> x >= 3) |> F.equals(4)
+findindexback_test() = [1,2,3,4] |> F.findindexback(x -> x >= 3) |> F.equals(4)
  
 init_test() = F.init(3, i -> i - 1) |> F.equals([0,1,2])
 
@@ -79,9 +79,9 @@ map2_test() = ([1,2,3], [2,3,4]) |> F.map2((x, y) -> y - x) |> F.equals([1,1,1])
 
 map3_test() = ([1,2,3], [3,2,1], [4,4,4]) |> F.map3((x, y, z) -> x + y - z) |> F.equals([0,0,0])
 
-mapFold_test() = [1,2,3] |> F.mapFold((x, s) -> (x + 1, s + x), 0) |> F.equals(([2,3,4], 6))
+mapfold_test() = [1,2,3] |> F.mapfold((x, s) -> (x + 1, s + x), 0) |> F.equals(([2,3,4], 6))
 
-mapFoldBack_test() = [1,2,3] |> F.mapFoldBack((x, s) -> (x + 1, s + x), 0) |> F.equals(([2,3,4], 6))
+mapfoldback_test() = [1,2,3] |> F.mapfoldback((x, s) -> (x + 1, s + x), 0) |> F.equals(([2,3,4], 6))
 
 mapi_test() = [1,2,3] |> F.mapi((i, x) -> x + i) |> F.equals([2,4,6])
 
@@ -91,11 +91,22 @@ mapi3_test() = ([1,1,1], [1,1,1], [1,1,1]) |> F.mapi3((i, x, y, z) -> i + x + y 
 
 max_test() = [1,2,3] |> F.max |> F.equals(3)
 
-maxBy_test() = ["a", "ab", "abc"] |> F.maxBy(length) |> F.equals(3)
+maxby_test() = ["a", "ab", "abc"] |> F.maxby(length) |> F.equals(3)
 
 min_test() = [1,2,3] |> F.min |> F.equals(1)
 
-minBy_test() = ["a", "ab", "abc"] |> F.minBy(length) |> F.equals(1)
+minby_test() = ["a", "ab", "abc"] |> F.minby(length) |> F.equals(1)
+
+pairwise_test() = [1,2,3] |> F.pairwise |> F.equals([(1, 2),(2, 3)])
+
+partition_test() = [1,2,3,4] |> F.partition(x -> x >= 3) |> F.equals([(3, 4),(1, 2)])
+
+permute_test() = false
+
+pick_test() = false
+
+
+takewhile_test() = [1,2,3,4] |> F.takewhile(x -> x < 3) |> F.equals([1, 2])
 
 #= join_test() = (["a", "b", "c"] |> F.join(",")) == "a,b,c"
 sum_test() = ([1,2,3,4] |> F.sum) == 10
@@ -127,7 +138,7 @@ apply_test() = ([TestMutableStruct(1, "ciao"),
 
     @test all2_test()
 
-    @test allPairs_test()
+    @test allpairs_test()
 
     @test any_test()
 
@@ -135,18 +146,18 @@ apply_test() = ([TestMutableStruct(1, "ciao"),
     
     @test avg_test()
 
-    @test chunkBySize_test()
+    @test chunkbysize_test()
 
     @test concat_test()
 
     @test contains_test_1()
     @test contains_test_2()
 
-    @test countBy_test()
+    @test countby_test()
 
     @test distinct_test()
 
-    @test distinctBy_test()
+    @test distinctby_test()
 
     @test enumerate_test()
 
@@ -160,11 +171,11 @@ apply_test() = ([TestMutableStruct(1, "ciao"),
 
     @test find_test()
 
-    @test findBack_test()
+    @test findback_test()
 
-    @test findIndex_test()
+    @test findindex_test()
 
-    @test findIndexBack_test()
+    @test findindexback_test()
 
     @test init_test()
 
@@ -176,9 +187,9 @@ apply_test() = ([TestMutableStruct(1, "ciao"),
 
     @test map3_test()
 
-    @test mapFold_test()
+    @test mapfold_test()
 
-    @test mapFoldBack_test()
+    @test mapfoldback_test()
 
     @test mapi_test()
 
@@ -188,12 +199,22 @@ apply_test() = ([TestMutableStruct(1, "ciao"),
 
     @test max_test()
 
-    @test maxBy_test()
+    @test maxby_test()
 
     @test min_test()
 
-    @test minBy_test()
+    @test minby_test()
+
+    @test pairwise_test()
     
+    @test partition_test()
+
+    @test permute_test()
+
+    @test pick_test()
+
+    @test takewhile_test()
+
     #= @test join_test()
     @test sum_test()
     

@@ -10,39 +10,39 @@ all(f::Function) = c -> c |> map(f) |> Base.all
 
 all2(f::Function) = c -> c |> map2(f) |> Base.all
 
-# AllPairs
+# allpairs
 
-allPairs(a, b) = begin
+function allpairs(a, b)
     n = length(a)
     m = length(b)
     A = Vector{Any}(undef, n * m)
     k = 1
     for i = 1:n
-    for j = 1:m
-        A[k] = (a[i], b[j])
-        k += 1
+        for j = 1:m
+            A[k] = (a[i], b[j])
+            k += 1
+        end
     end
-end
     A
 end
 
-allPairs(c) = allPairs(c...)
+allpairs(c) = allpairs(c...)
 
 # Any
 
 any(f::Function) = c -> c |> map(f) |> Base.any
 
-any2(f::Function) = c -> begin
+any2(f::Function) = function (c)
     (a, b) = c
     if length(a) != length(b)
-    throw(ErrorException("Error different lenghts"))
-end
+        throw(ErrorException("Error different lenghts"))
+    end
 
     n = length(a)
     A = Vector{Any}(undef, n)
     for i = 1:n
-    if f(a[i], b[i]) return true end
-end
+        if f(a[i], b[i]) return true end
+    end
     return false
 end
 
@@ -52,32 +52,32 @@ avg(c) = sum(c) / length(c)
 
 const average = avg
 
-# AverageBy
+# averageby
 
-averageBy(f::Function) = c -> c |> map(f) |> avg
+averageby(f::Function) = c -> c |> map(f) |> avg
 
-const avgBy = averageBy
+const avgby = averageby
 
 # Choose
 
 choose(f::Function) = nothing
 
-# ChunkBySize 
+# chunkbysize 
 
-chunkBySize(n::Int) = c -> begin
+chunkbysize(n::Int) = function (c)
     l = length(c)
     m = Int(trunc(l / n))
     A = Vector{Any}(undef, m)
     for i = 1:m
         # N = Base.slice(c, ((i - 1) * n + 1):(i * n), :) |> Base.collect
         # A[i] = N
-end
+    end
     A
 end
 
-# CompareWith
+# comparewith
 
-compareWith(f::Function) = nothing
+comparewith(f::Function) = nothing
 
 # Concat 
 
@@ -91,25 +91,25 @@ contains(e) = c -> c |> any(x -> x == e)
 
 contains(f::Function) = c -> c |> any(f)
 
-# CountBy 
+# countby 
 
-countBy(f::Function) = d -> d |> filter(f) |> length
+countby(f::Function) = d -> d |> filter(f) |> length
 
 # Distinct
 
-distinct(c) = c |> distinctBy(x -> x)
+distinct(c) = c |> distinctby(x -> x)
 
-# DistinctBy
+# distinctby
 
-distinctBy(f::Function) = c -> begin
+distinctby(f::Function) = function (c)
     out = Dict()
     for e ∈ c
-    k = f(e)
-    l = get(out, k, nothing)
-    if l === nothing
-        out[k] = e
+        k = f(e)
+        l = get(out, k, nothing)
+        if l === nothing
+            out[k] = e
+        end
     end
-end
     return out |> collect |> map(e -> e[2])
 end
 
@@ -143,17 +143,17 @@ filter(f::Function) = c -> Base.filter(f, c)
 
 find(f::Function) = c -> c |> filter(f) |> first
 
-# FindBack 
+# findback 
 
-findBack(f::Function) = c -> c |> filter(f) |> last
+findback(f::Function) = c -> c |> filter(f) |> last
 
-# FindIndex
+# findindex
 
-findIndex(f::Function) = c -> c |> enumerate |> filter(x -> f(x[2])) |> first |> x -> x[1]
+findindex(f::Function) = c -> c |> enumerate |> filter(x -> f(x[2])) |> first |> x -> x[1]
 
-# FindIndexBack 
+# findindexback 
 
-findIndexBack(f::Function) = c -> c |> enumerate |> filter(x -> f(x[2])) |> last |> x -> x[1]
+findindexback(f::Function) = c -> c |> enumerate |> filter(x -> f(x[2])) |> last |> x -> x[1]
 
 # First 
 
@@ -167,37 +167,37 @@ fold(f::Function, state) = nothing
 
 fold2(f::Function, state) = nothing
 
-# FoldBack 
+# foldback 
 
-foldBack(f::Function, state) = nothing
+foldback(f::Function, state) = nothing
 
-foldBack2(f::Function, state) = nothing
+foldback2(f::Function, state) = nothing
 
 # Fold Right
 
-foldRight(f::Function) = c -> Base.foldr(f, c)
+foldright(f::Function) = c -> Base.foldr(f, c)
 
 # Fold Left
 
-foldLeft(f::Function) = c -> Base.foldl(f, c)
+foldleft(f::Function) = c -> Base.foldl(f, c)
 
 # ForAll
 
 const forAll = nothing # iter
 
-# GroupBy
+# groupby
 
-groupBy(f::Function) = c -> begin
+groupby(f::Function) = function (c)
     out = Dict()
     for e ∈ c    
-    k = f(e)
-    l = get(out, k, nothing)
-    if l === nothing
-        l = []
-        out[k] = l
+        k = f(e)
+        l = get(out, k, nothing)
+        if l === nothing
+            l = []
+            out[k] = l
+        end
+        push!(l, e)
     end
-    push!(l, e)
-end
     return out |> collect |> map(e -> e[2])
 end
 
@@ -211,19 +211,19 @@ const indexed = enumerate
 
 # Init
 
-init(n, f::Function) = begin
+function init(n, f::Function)
     A = Vector{Any}(undef, n)
     for i = 1:n
-    A[i] = f(i)
-end
+        A[i] = f(i)
+    end
     A
 end
 
 init(f::Function) = n -> init(n, f)
 
-# IsEmpty
+# isempty
 
-const isEmpty = empty
+const isempty = empty
 
 # Item
 
@@ -237,37 +237,37 @@ iter(f::Function) = c -> begin
     end
 end
 
-iter2(f::Function) = c -> begin
+iter2(f::Function) = function (c)
     (a, b) = c
     n = length(a)
     m = length(b)
     if n != m
-    throw(ErrorException("Error"))
-end
+        throw(ErrorException("Error"))
+    end
     for i = 1:n
-    f(a[i], b[i])
-end
+        f(a[i], b[i])
+    end
 end
 
 # Iteri
 
-iteri(f::Function) = c -> begin
+iteri(f::Function) = function (c)
     n = length(c)
     for i = 1:n
-    f(i, c[i])
-end
+        f(i, c[i])
+    end
 end
 
-iteri2(f::Function) = c -> begin
+iteri2(f::Function) = function (c)
     (a, b) = c
     n = length(a)
     m = length(b)
     if n != m
-    throw(ErrorException("Error"))
-end
+        throw(ErrorException("Error"))
+    end
     for i = 1:n
-    f(i, a[i], b[i])
-end
+        f(i, a[i], b[i])
+    end
 end
 
 # Last
@@ -282,98 +282,98 @@ const lastindex = Base.lastindex
 
 map(f::Function) = c -> Base.map(f, c) 
 
-map2(f::Function) = c -> begin
+map2(f::Function) = function (c)
     (a, b) = c
     if length(a) != length(b)
-    throw(ErrorException("Error different lenghts"))
-end
+        throw(ErrorException("Error different lenghts"))
+    end
 
     n = length(a)
     A = Vector{Any}(undef, n)
     for i = 1:n
-    A[i] = f(a[i], b[i])
-end
+        A[i] = f(a[i], b[i])
+    end
     A
 end
 
-map3(f::Function) = s -> begin
+map3(f::Function) = function (s)
     (a, b, c) = s
     if length(a) != length(b) != length(c)
-    throw(ErrorException("Error different lenghts"))
-end
+        throw(ErrorException("Error different lenghts"))
+    end
 
     n = length(a)
     A = Vector{Any}(undef, n)
     for i = 1:n
-    A[i] = f(a[i], b[i], c[i])
-end
+        A[i] = f(a[i], b[i], c[i])
+    end
     A
 end
 
-# MapFold
+# mapfold
 
-mapFold(f::Function, s) = c -> begin
+mapfold(f::Function, s) = function (c)
     n = length(c)
     A = Vector{Any}(undef, n)
     state = s
     for i = 1:n
-    (new_value, new_state) = f(c[i], state)
-    state = new_state
-    A[i] = new_value
-end
+        (new_value, new_state) = f(c[i], state)
+        state = new_state
+        A[i] = new_value
+    end
     (A, state)
 end
 
-# MapFoldBack
+# mapfoldback
 
-mapFoldBack(f::Function, s) = c -> begin
+mapfoldback(f::Function, s) = function (c)
     n = length(c)
     A = Vector{Any}(undef, n)
     state = s
     for i = Iterators.reverse(1:n)
-    (new_value, new_state) = f(c[i], state)
-    state = new_state
-    A[i] = new_value
-end
+        (new_value, new_state) = f(c[i], state)
+        state = new_state
+        A[i] = new_value
+    end
     (A, state)
 end
 
 # Mapi
 
-mapi(f::Function) = c -> begin
+mapi(f::Function) = function (c)
     n = length(c)
     A = Vector{Any}(undef, n)
     for i = 1:n
-    A[i] = f(i, c[i])
-end
+        A[i] = f(i, c[i])
+    end
     A
 end
 
-mapi2(f::Function) = c -> begin
+mapi2(f::Function) = function (c)
     (a, b) = c
     if length(a) != length(b)
-    throw(ErrorException("Error different lenghts"))
-end
+        throw(ErrorException("Error different lenghts"))
+    end
 
     n = length(a)
     A = Vector{Any}(undef, n)
     for i = 1:n
-    A[i] = f(i, a[i], b[i])
-end
+        A[i] = f(i, a[i], b[i])
+    end
     A
 end
 
-mapi3(f::Function) = s -> begin
+mapi3(f::Function) = function (s)
     (a, b, c) = s
     if length(a) != length(b) != length(c)
-    throw(ErrorException("Error different lenghts"))
-end
+        throw(ErrorException("Error different lenghts"))
+    end
 
     n = length(a)
     A = Vector{Any}(undef, n)
     for i = 1:n
-    A[i] = f(i, a[i], b[i], c[i])
-end
+        A[i] = f(i, a[i], b[i], c[i])
+    end
     A
 end
 
@@ -381,33 +381,49 @@ end
 
 max(c) = Base.Iterators.maximum(c)
 
-# MaxBy
+# maxby
 
-maxBy(f::Function) = c -> Base.Iterators.maximum(f, c)
+maxby(f::Function) = c -> Base.Iterators.maximum(f, c)
 
 # Min
 
 min(c) = Base.Iterators.minimum(c)
 
-# MinBy
+# Minby
 
-minBy(f::Function) = c -> Base.Iterators.minimum(f, c)
+minby(f::Function) = c -> Base.Iterators.minimum(f, c)
 
 # Pairwise
 
-pairwise(c) = nothing
+function pairwise(c)
+    n = length(c)
+    V = Vector{Any}(undef, n - 1)
+    for i = 1:(n - 1)
+        V[i] = (c[i], c[i + 1])
+    end
+    V
+end
 
 # Partition
 
-partition(f::Function) = c -> nothing
+partition(f::Function) = c -> begin
+    A = []
+    B = []
+    (A, B)
+end
 
 # Permute
 
-permute(f::Function) = c -> nothing
+permute(f::Function) = c -> begin
+    A = []
+    A
+end
 
 # Pick
 
-pick(f::Function) = c -> nothing
+pick(f::Function) = c -> begin
+    nothing
+end
 
 # Range
 
@@ -417,9 +433,11 @@ const range = Base.range
 
 reduce(f::Function) = c -> Base.reduce(f, c)
 
-# ReduceBack
+# Reduceback
 
-reduceBack(f::Function) = c -> nothing
+reduceback(f::Function) = c -> begin
+    
+end
 
 # Repeat
 
@@ -439,9 +457,9 @@ const rev = reverse
 
 scan(f::Function, state) = c -> nothing
 
-# ScanBack
+# Scanback
 
-scanBack(f::Function, state) = c -> nothing
+scanback(f::Function, state) = c -> nothing
 
 # Singleton
 
@@ -451,33 +469,33 @@ singleton(value) = [value]
 
 skip(n::Int) = c -> Base.Iterators.drop(c, n)
 
-# SkipWhile
+# Skipwhile
 
-skipWhile(f::Function) = c -> Base.Iterators.dropwhile(f, c)
+skipwhile(f::Function) = c -> Base.Iterators.dropwhile(f, c)
 
 # Sort
 
 sort(c) = nothing
 
-# SortBy
+# Sortby
 
-sortBy(f::Function) = nothing
+sortby(f::Function) = nothing
 
-# SortByDescending
+# SortbyDescending
 
-sortByDescending(f::Function) = nothing
+sortbydescending(f::Function) = nothing
 
 # SortDescending
 
-sortDescending(f::Function) = nothing
+sortdescending(f::Function) = nothing
 
-# Sort With
+# Sort with
 
-sortWith(f::Function) = nothing
+sortwith(f::Function) = nothing
 
 # Split At
 
-splitAt(i) = x -> nothing
+splitat(i) = x -> nothing
 
 # Zip
 
@@ -489,31 +507,17 @@ zip(c...) = Base.zip(c...)
 
 unzip(c) = Base.map(f -> getfield.(c, f), fieldnames(eltype(c)))
 
+# Tail 
 
-
-
-
-
-
-
+tail() = c -> c |> skip(1)
 
 # Take
 
 take(n::Int) = c -> Base.Iterators.take(c, n)
 
-# Take While
+# Take while
 
 takewhile(f::Function) = c -> Base.Iterators.takewhile(f, c)
-
-
-
-# Tail 
-
-tail() = c -> c |> skip(1)
-
-
-
-
 
 # Sum
 
@@ -523,22 +527,9 @@ sum(c) = c |> reduce(+)
 
 mul(c) = c |> reduce(*)
 
-
-
-
-# Avg
-
-
-
 # Join
 
 join(delim) = c -> Base.join(c, delim)
-
-# Concat
-
-# Group By
-
-
 
 # Merge 
 
