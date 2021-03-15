@@ -106,7 +106,15 @@ permute_test() = false
 pick_test() = false
 
 
+unzip_test() = [(1, 1), (2, 2)] |> F.unzip |> F.equals(([1,2], [1,2]))
+
+tail_test() = [1,2,3,4] |> F.tail |> F.equals([2,3,4])
+
+take_test() = [1,2,3,4] |> F.take(3) |> F.equals([1,2,3])
+
 takewhile_test() = [1,2,3,4] |> F.takewhile(x -> x < 3) |> F.equals([1, 2])
+
+zip_test() = ([1,2,3], [1,2,3]) |> F.zip |> F.equals([(1, 1), (2, 2), (3, 3)])
 
 #= join_test() = (["a", "b", "c"] |> F.join(",")) == "a,b,c"
 sum_test() = ([1,2,3,4] |> F.sum) == 10
@@ -213,7 +221,15 @@ apply_test() = ([TestMutableStruct(1, "ciao"),
 
     @test pick_test()
 
+    @test unzip_test()
+
+    @test tail_test()
+
+    @test take_test()
+
     @test takewhile_test()
+
+    @test zip_test()
 
     #= @test join_test()
     @test sum_test()

@@ -123,7 +123,7 @@ const empty = Base.isempty
 
 # Equals
 
-equals(e) = v -> v == e
+equals(e) = v -> Base.collect(v) == Base.collect(e)
 
 # Except
 
@@ -425,6 +425,13 @@ pick(f::Function) = c -> begin
     nothing
 end
 
+# Print
+
+function print(c)
+    Base.print(c)
+    c
+end
+
 # Range
 
 const range = Base.range
@@ -497,19 +504,13 @@ sortwith(f::Function) = nothing
 
 splitat(i) = x -> nothing
 
-# Zip
-
-zip(c::Tuple) = zip(c...)
-
-zip(c...) = Base.zip(c...)
-
 # Unzip
 
 unzip(c) = Base.map(f -> getfield.(c, f), fieldnames(eltype(c)))
 
 # Tail 
 
-tail() = c -> c |> skip(1)
+tail(c) = c |> skip(1)
 
 # Take
 
@@ -518,6 +519,15 @@ take(n::Int) = c -> Base.Iterators.take(c, n)
 # Take while
 
 takewhile(f::Function) = c -> Base.Iterators.takewhile(f, c)
+
+# Zip
+
+zip(c::Tuple) = zip(c...)
+
+zip(c...) = Base.zip(c...)
+
+
+
 
 # Sum
 
