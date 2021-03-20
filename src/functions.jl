@@ -482,7 +482,7 @@ skipwhile(f::Function) = c -> Base.Iterators.dropwhile(f, c)
 
 # Sort
 
-sort(c) = nothing
+sort(c) = Base.sort(c)
 
 # Sortby
 
@@ -502,7 +502,19 @@ sortwith(f::Function) = nothing
 
 # Split At
 
-splitat(i) = x -> nothing
+splitat(i) = c -> nothing
+
+# Split Into
+
+splitinto(count) = c -> nothing
+
+# Sum
+
+sum(c) = c |> reduce(+)
+
+# SumBy
+
+sumby(f::Function) = c -> (c |> map |> sum)
 
 # Unzip
 
@@ -526,12 +538,6 @@ zip(c::Tuple) = zip(c...)
 
 zip(c...) = Base.zip(c...)
 
-
-
-
-# Sum
-
-sum(c) = c |> reduce(+)
 
 # Mul
 
